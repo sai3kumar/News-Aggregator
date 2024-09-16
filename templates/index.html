@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Display</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <script>
+        async function fetchArticles() {
+            const category = document.getElementById('category').value;
+            const date = document.getElementById('date').value;
+            const headline = document.getElementById('headline').value;
+            
+            const response = await fetch(`/api/articles?category=${category}&date=${date}&headline=${headline}`);
+            const articles = await response.json();
+            displayArticles(articles);
+        }
+
+        function displayArticles(articles) {
+            const tableBody = document.getElementById('articles-table-body');
+            tableBody.innerHTML = '';
+
+            articles.forEach(article => {
+                const row = `<tr>
+                    <td>${article.headline}</td>
+                    <td>${article.date}</td>
+                    <td>${article.category}</td>
+                    <td><a href="${article.link}" target="_blank">Link</a></td>
+                    <td>${article.description}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1> Personalized News Aggregator </h1>
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <input type="text" id="category">
+        </div>
+        <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="text" id="date">
+        </div>
+        <div class="form-group">
+            <label for="headline">Headline:</label>
+            <input type="text" id="headline">
+        </div>
+        <button onclick="fetchArticles()">Filter</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Headline</th>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Link</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody id="articles-table-body">
+                <!-- Data will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

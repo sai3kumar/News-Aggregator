@@ -1,0 +1,12 @@
+Requirements:
+
+
+Flask: The web framework for the application.
+requests: For making HTTP requests to scrape articles.
+beautifulsoup4: For parsing HTML and extracting data from web pages.
+selenium: For automating web browser interactions (useful for scraping dynamic content).
+pandas: For data manipulation and handling (e.g., working with CSV files).
+nltk: For natural language processing tasks.
+spacy: Another NLP library for more advanced text processing.
+textblob: For simple text processing tasks.
+python-dotenv: For loading environment variables from a .env file.

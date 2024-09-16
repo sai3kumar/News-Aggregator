@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Display</title>
+    
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #343a40;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #495057;
+}
+
+input[type="text"] {
+    width: calc(100% - 22px);
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #dee2e6;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    background-color: #ffffff;
+}
+
+th {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+tr:hover {
+    background-color: #f1f3f5;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+    </style>
+    <script>
+        async function fetchArticles(filterType) {
+            const category = document.getElementById('category').value;
+            const date = document.getElementById('date').value;
+            const headline = document.getElementById('headline').value;
+            
+            let url = '/api/articles';
+            if (filterType === 'category') {
+                url = `/api/articles/category?category=${category}`;
+            } else if (filterType === 'date') {
+                url = `/api/articles/date?date=${date}`;
+            } else if (filterType === 'headline') {
+                url = `/api/articles/headline?headline=${headline}`;
+            }
+            
+            const response = await fetch(url);
+            const articles = await response.json();
+            displayArticles(articles);
+        }
+
+        function displayArticles(articles) {
+            const tableBody = document.getElementById('articles-table-body');
+            tableBody.innerHTML = '';
+
+            articles.forEach(article => {
+                const row = `<tr>
+                    <td>${article.headline}</td>
+                    <td>${article.date}</td>
+                    <td>${article.category}</td>
+                    <td><a href="${article.link}" target="_blank">Link</a></td>
+                    <td>${article.description}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>CSV Data Display</h1>
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <input type="text" id="category">
+        </div>
+        <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="text" id="date">
+        </div>
+        <div class="form-group">
+            <label for="headline">Headline:</label>
+            <input type="text" id="headline">
+        </div>
+        <button onclick="fetchArticles('category')">Filter by Category</button>
+        <button onclick="fetchArticles('date')">Filter by Date</button>
+        <button onclick="fetchArticles('headline')">Filter by Headline</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Headline</th>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Link</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody id="articles-table-body">
+                <!-- Data will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
